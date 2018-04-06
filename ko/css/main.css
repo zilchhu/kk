@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f1f1f1;
+}
+.header {
+  display: block;
+  position: relative;
+  background: white;
+}
+.header .h-title {
+  padding: 20px;
+  font-size: 1.28em;
+  font-weight: bold;
+  text-align: center;
+}
+.header .h-back {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
+.search-form {
+  padding: 20px;
+}
+.search-form .s-form {
+  display: flex;
+  border-radius: 6px;
+}
+.search-form .s-form .s-input {
+  flex: 0 1 auto;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  outline: none;
+  caret-color: cyan;
+}
+.search-form .s-form .s-delete {
+  display: block;
+  padding: 8px;
+  background: white;
+}
+.search-form .s-form .s-submit {
+  border: none;
+  text-decoration: none;
+  padding: 8px 12px;
+  color: white;
+  background: coral;
+}
+.search-suggestion-v {
+  padding: 0 20px;
+  background: white;
+}
+.search-suggestion-v ul .s-title {
+  padding: 8px;
+  border-top: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+.search-suggestion-v ul .s-title:first-child {
+  border-top-width: 0;
+}
+.search-suggestion-h {
+  padding-bottom: 20px;
+  background: white;
+}
+.search-suggestion-h ul {
+  display: block;
+  padding: 8px;
+  height: 100px;
+  overflow: hidden;
+}
+.search-suggestion-h ul li {
+  float: left;
+  padding: 8px;
+  margin: 8px;
+  border: 1px solid #f1f1f1;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.search-suggestion-h .s-refresh {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 400;
+}
+.search-suggestion-h .s-refresh img {
+  vertical-align: middle;
+  margin-right: 8px;
+}
