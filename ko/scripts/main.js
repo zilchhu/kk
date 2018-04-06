@@ -19,9 +19,9 @@ requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'search'], 
     Vue.component('csearch', Search.SearchForm)
     Vue.component('csuggestionv', Search.SearchSuggestion)
     Vue.component('csuggestionh', Search.SearchSuggestionH)
-    Vue.component('chistory', Search.SearchHistory)
+    Vue.component('cdetail', Search.SearchDetail)
     const Foo = { template: '<div>foo</div>' }
-    const Bar = Search.searchForm
+    const Bar = { template: '<div>bar</div>' }
     console.log(Foo)
     console.log(Bar)
     // 2. 定义路由
@@ -30,8 +30,9 @@ requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'search'], 
     // 或者，只是一个组件配置对象。
     // 我们晚点再讨论嵌套路由。
     const routes = [
-        { path: '/foo', component: Foo },
-        { path: '/bar', component: Bar }
+        { path: '/suggestionh', component: Search.SearchSuggestionH},
+        { path: '/suggestionv/:words', component: Search.SearchSuggestion, props: true },
+        { path: '/detail/:words', component: Search.SearchDetail, props: true }
     ]
 
     // 3. 创建 router 实例，然后传 `routes` 配置

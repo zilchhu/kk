@@ -5,10 +5,10 @@ define([
     const _SearchForm = {
         template: `
             <div class="search-form">
-                <form class="s-form" action="/search" method="get" >
-                    <input ref="in" v-model="value"  class="s-input" type="text" name="words" id="" placeholder="输入关键词">
+                <form class="s-form">
+                    <input  ref="in" v-model="value"  class="s-input" type="text" name="words" id="" placeholder="输入关键词">
                     <img v-show="deleteShow" v-on:click="reset" class="s-delete" src="imgs/delete.png" alt="" width="16px" height="16px">
-                    <input class="s-submit" type="submit" value="搜索">
+                    <input @click="sendSearch(value)"class="s-submit" type="button" value="搜索">
                 </form>
              </div>
             `,
@@ -19,14 +19,24 @@ define([
         },
         computed: {
             deleteShow: function () {
-                bus.$emit('words', this.value)
-                return this.value != ''
+                if (this.value != '') {
+                    this.$router.push({ path: `/suggestionv/${this.value}` })
+                    return true
+                } else {
+                    this.$router.push({ path: `/suggestionh` })
+                    return false
+                }
             }
         },
         methods: {
             reset: function () {
                 this.value = ''
                 this.$refs.in.focus()
+            },
+            sendSearch: function (value) {
+                //bus.$emit('search-words', value)
+                localStorage.setItem(value, value)
+                this.$router.push({ path: `/detail/${value}` })
             }
         },
         mounted: function () {
@@ -34,40 +44,31 @@ define([
         }
     }
     const _SearchSuggestion = {
+        props: {
+            words: {
+                type: String
+            }
+        },
         template: `
-            <div v-if="suggestionShow" class="search-suggestion-v">
+            <div  class="search-suggestion-v">
                 <ul>
-                    <li  v-for="suggestion in suggestions" @click="search(suggestion)" class="s-title">{{suggestion}}</li>
+                    <li  v-for="suggestion in suggestions" @click="sendSearch(suggestion)" class="s-title">{{suggestion}}</li>
                 </ul>
             </div>
             `,
         data: function () {
             return {
                 base_url: 'http://unionsug.baidu.com/su?wd=',
-                words: '',
                 suggestions: []
-            }
-        },
-        computed: {
-            suggestionShow: function () {
-                return this.words != '' && this.suggestions.length > 0
             }
         },
         watch: {
             words: function (val) {
-                axios.get(this.base_url + val)
-                    .then(response => {
-                        this.parse(response)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                this.getSearch(val)
             }
         },
         mounted: function () {
-            bus.$on('words', value => {
-                this.words = value
-            })
+            this.getSearch(this.words)
         },
         methods: {
             parse: function (res) {
@@ -81,29 +82,54 @@ define([
                 })
                 console.log(this.suggestions)
             },
-            search: function (value) {
-                bus.$emit('search-words', value)
+            sendSearch: function (value) {
+                // bus.$emit('search-words', value)
+                localStorage.setItem(value, value)
+                this.$router.push({ path: `/detail/${value}` })
+            },
+            getSearch: function (val) {
+                console.log(val, 'new')
+                axios.get(this.base_url + val)
+                    .then(response => {
+                        this.parse(response)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
             }
         }
     }
     const _SearchSuggestionH = {
+        props: {
+            words: {
+                type: String
+            }
+        },
         template: `
-            <div v-if="sugShow" class="search-suggestion-h">
+            <div>
+            <div  class="search-suggestion-h">
                 <ul>
-                     <li @click="search(sug)" ref="sugItems" v-for="sug in sugs" class="s-title">{{sug}}</li>
+                     <li @click="sendSearch(sug)" ref="sugItems" v-for="sug in sugs" class="s-title">{{sug}}</li>
                 </ul>
                 <p @click="refresh" class="s-refresh"><img src="imgs/aui-icon-refresh.png" width="14px" height="14px" alt="">换一批</p>
+            </div>
+            <div v-if="historyShow"  class="search-history">
+                <ul>
+                    <li @click="sendSearch(history)" v-for="history in historys" class="s-title"><img src="imgs/history.png" width="12px" height="12px" alt="">{{history}}</li>
+                </ul>
+                <p @click="clear" class="s-delete"><img src="imgs/clear.png" width="14px" height="14px" alt="">清空搜索历史</p>
+            </div>
             </div>
             `,
         data: function () {
             return {
                 sugs: [],
-                words: ''
+                historys: []
             }
         },
         computed: {
-            sugShow: function () {
-                return this.words == ''
+            historyShow: function () {
+                return this.historys.length > 0
             }
         },
         methods: {
@@ -115,8 +141,14 @@ define([
                     }
                 })
             },
-            search: function (value) {
-                bus.$emit('search-words', value)
+            sendSearch: function (value) {
+                //bus.$emit('search-words', value)
+                localStorage.setItem(value, value)
+                this.$router.push({ path: `/detail/${value}` })
+            },
+            clear: function () {
+                this.historys.clear()
+                localStorage.clear()
             }
         },
         mounted: function () {
@@ -128,66 +160,67 @@ define([
             this.sugs.push('6 as实打实的das')
             this.sugs.push('7 asdas')
             this.sugs.push('8 asd萨达as')
-            bus.$on('words', value => {
-                this.words = value
-            })
-        }
-    }
-    const _SearchHistory = {
-        template: `
-            <div v-if="historyShow" class="search-history">
-                <ul>
-                    <li v-for="history in historys" class="s-title"><img src="imgs/history.png" width="12px" height="12px" alt="">{{history}}</li>
-                </ul>
-                <p @click="clear" class="s-delete"><img src="imgs/clear.png" width="14px" height="14px" alt="">清空搜索历史</p>
-            </div>
-            `,
-        data: function () {
-            return {
-                historys: [],
-                words: ''
-            }
-        },
-        computed: {
-            historyShow: function () {
-                return this.words == '' && this.historys.length > 0
-            }
-        },
-        watch: {
-            historys: function (vals) {
-                let val = vals.last()
-                if (!val) {
-                    localStorage.clear()
-                    return
-                }
-                localStorage.setItem(val, val)
-            }
-        },
-        methods: {
-            clear: function () {
-                this.historys.clear()
-            }
-        },
-        mounted: function () {
-            bus.$on('words', value => {
-                this.words = value
-            })
-            bus.$on('search-words', value => {
-                if (!this.historys.includes(value)) {
-                    this.historys.push(value)
-                }
-            })
+            //history
             for (let i = 0, j = localStorage.length; i < j; i++) {
                 let key = localStorage.key(i)
                 this.historys.push(key)
             }
+            // bus.$on('search-words', value => {
+            //     if (!this.historys.includes(value)) {
+            //         this.historys.push(value)
+            //         console.log(this.historys)
+            //     }
+            // })
         }
+    }
+
+    const _SearchDetail = {
+        props: {
+            words: {
+                type: String
+            }
+        },
+        template: `
+            <div class="search-detail">
+                <p class="s-state">{{state}}{{words}}</p>
+                <ul>
+                    <p class="s-title">相关书籍</p>
+                    <li v-for="book in books">
+                        <div class="s-content">
+                            <img :src="book.coverUrl" width="70px" height="100px"  alt="">
+                            <div class="c-detail">
+                                <h3 class="c-title">{{book.title}}</h3>
+                                <p class="c-abstract">{{book.abstract}}</p>
+                                <div class="c-author">{{book.author}}<ul><li v-for="mark in book.marks" class="c-mark">{{mark}}</li></ul></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            `,
+        data: function () {
+            return {
+                state: '搜素',
+                books: [
+                    {
+                        coverUrl: 'imgs/benbengou.jpg',
+                        title: '解决',
+                        abstract: '大大是',
+                        author: '是',
+                        marks: ['a', 's']
+                    }
+                ]
+            }
+        },
+        mounted: function () {
+
+        }
+
     }
     return {
         SearchForm: _SearchForm,
         SearchSuggestion: _SearchSuggestion,
         SearchSuggestionH: _SearchSuggestionH,
-        SearchHistory: _SearchHistory
+        SearchDetail: _SearchDetail
     }
-
 });
