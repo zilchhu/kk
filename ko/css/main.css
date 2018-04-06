@@ -98,3 +98,29 @@ li {
   vertical-align: middle;
   margin-right: 8px;
 }
+.search-history {
+  padding-bottom: 20px;
+  background: white;
+}
+.search-history ul .s-title {
+  padding: 8px;
+  padding-left: 16px;
+  border-top: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+.search-history ul .s-title:first-child {
+  border-top-width: 0;
+}
+.search-history ul .s-title img {
+  vertical-align: middle;
+  margin-right: 12px;
+}
+.search-history .s-delete {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 400;
+}
+.search-history .s-delete img {
+  vertical-align: middle;
+  margin-right: 4px;
+}

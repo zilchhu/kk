@@ -1,6 +1,6 @@
 define([
-    'vue', 'axios', 'jquery'
-], function (Vue, axios, $) {
+    'vue', 'axios', 'util'
+], function (Vue, axios, Util) {
     var bus = new Vue()
     const _SearchForm = {
         template: `
@@ -37,7 +37,7 @@ define([
         template: `
             <div v-if="suggestionShow" class="search-suggestion-v">
                 <ul>
-                    <li v-for="suggestion in suggestions" class="s-title">{{suggestion}}</li>
+                    <li  v-for="suggestion in suggestions" @click="search(suggestion)" class="s-title">{{suggestion}}</li>
                 </ul>
             </div>
             `,
@@ -75,11 +75,14 @@ define([
                 let d = res.data;
                 let j = eval(d.substring(16, d.length - 1))
                 let s = j.s
-                this.suggestions.splice(0, this.suggestions.length)
+                this.suggestions.clear()
                 s.forEach(value => {
                     this.suggestions.push(value)
                 })
                 console.log(this.suggestions)
+            },
+            search: function (value) {
+                bus.$emit('search-words', value)
             }
         }
     }
@@ -87,7 +90,7 @@ define([
         template: `
             <div v-if="sugShow" class="search-suggestion-h">
                 <ul>
-                     <li ref="sugItems" v-for="sug in sugs" class="s-title">{{sug}}</li>
+                     <li @click="search(sug)" ref="sugItems" v-for="sug in sugs" class="s-title">{{sug}}</li>
                 </ul>
                 <p @click="refresh" class="s-refresh"><img src="imgs/aui-icon-refresh.png" width="14px" height="14px" alt="">换一批</p>
             </div>
@@ -111,6 +114,9 @@ define([
                         this.sugs.push(this.sugs.shift())
                     }
                 })
+            },
+            search: function (value) {
+                bus.$emit('search-words', value)
             }
         },
         mounted: function () {
@@ -127,13 +133,61 @@ define([
             })
         }
     }
-    const _SearchHistory={
-         
+    const _SearchHistory = {
+        template: `
+            <div v-if="historyShow" class="search-history">
+                <ul>
+                    <li v-for="history in historys" class="s-title"><img src="imgs/history.png" width="12px" height="12px" alt="">{{history}}</li>
+                </ul>
+                <p @click="clear" class="s-delete"><img src="imgs/clear.png" width="14px" height="14px" alt="">清空搜索历史</p>
+            </div>
+            `,
+        data: function () {
+            return {
+                historys: [],
+                words: ''
+            }
+        },
+        computed: {
+            historyShow: function () {
+                return this.words == '' && this.historys.length > 0
+            }
+        },
+        watch: {
+            historys: function (vals) {
+                let val = vals.last()
+                if (!val) {
+                    localStorage.clear()
+                    return
+                }
+                localStorage.setItem(val, val)
+            }
+        },
+        methods: {
+            clear: function () {
+                this.historys.clear()
+            }
+        },
+        mounted: function () {
+            bus.$on('words', value => {
+                this.words = value
+            })
+            bus.$on('search-words', value => {
+                if (!this.historys.includes(value)) {
+                    this.historys.push(value)
+                }
+            })
+            for (let i = 0, j = localStorage.length; i < j; i++) {
+                let key = localStorage.key(i)
+                this.historys.push(key)
+            }
+        }
     }
     return {
         SearchForm: _SearchForm,
         SearchSuggestion: _SearchSuggestion,
-        SearchSuggestionH: _SearchSuggestionH
+        SearchSuggestionH: _SearchSuggestionH,
+        SearchHistory: _SearchHistory
     }
 
 });

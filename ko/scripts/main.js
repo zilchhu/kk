@@ -2,6 +2,7 @@ requirejs.config({
     baseUrl: 'scripts/lib',
     paths: {
         jquery: 'jquery-3.3.1.min',
+        util: '../helper/util',
         vue: 'https://unpkg.com/vue/dist/vue',
         vue_router: 'https://unpkg.com/vue-router/dist/vue-router',
         axios: 'https://unpkg.com/axios/dist/axios',
@@ -12,12 +13,13 @@ requirejs.config({
     }
 })
 
-requirejs(['jquery', 'vue', 'vue_router', 'axios', 'common', 'search'], function ($, Vue, VueRouter, axios, Common, Search) {
+requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'search'], function ($, Util, Vue, VueRouter, axios, Common, Search) {
     Vue.use(VueRouter)
     Vue.component('cheader', Common.Header)
     Vue.component('csearch', Search.SearchForm)
     Vue.component('csuggestionv', Search.SearchSuggestion)
     Vue.component('csuggestionh', Search.SearchSuggestionH)
+    Vue.component('chistory', Search.SearchHistory)
     const Foo = { template: '<div>foo</div>' }
     const Bar = Search.searchForm
     console.log(Foo)
