@@ -58,6 +58,7 @@ define([
             `,
         data: function () {
             return {
+                forward_url: 'http://198.13.51.237/in.php?url=',
                 base_url: 'http://unionsug.baidu.com/su?wd=',
                 suggestions: []
             }
@@ -89,7 +90,7 @@ define([
             },
             getSearch: function (val) {
                 console.log(val, 'new')
-                axios.get(this.base_url + val)
+                axios.get(this.forward_url+this.base_url+val)
                     .then(response => {
                         this.parse(response)
                     })

@@ -19,8 +19,8 @@ li {
   background: white;
 }
 .header .h-title {
-  padding: 20px;
-  font-size: 1.28em;
+  padding: 14px;
+  font-size: 1.1em;
   font-weight: bold;
   text-align: center;
 }
@@ -30,6 +30,7 @@ li {
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
+  font-size: 14px;
   font-weight: bold;
 }
 .search-form {
@@ -103,10 +104,10 @@ li {
   background: white;
 }
 .search-history ul .s-title {
-  padding: 8px;
+  padding: 12px;
   padding-left: 16px;
   border-top: 1px solid #f1f1f1;
-  font-size: 14px;
+  font-size: 12px;
 }
 .search-history ul .s-title:first-child {
   border-top-width: 0;

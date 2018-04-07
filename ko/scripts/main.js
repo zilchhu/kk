@@ -47,7 +47,7 @@ requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'search'], 
     const app = new Vue({
         router,
         data: {
-            title: 'Title'
+            title: '搜索'
         },
         methods: {
 
