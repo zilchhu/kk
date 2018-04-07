@@ -20,7 +20,7 @@ define([
         computed: {
             deleteShow: function () {
                 if (this.value != '') {
-                    this.$router.push({ path: `/suggestionv/${this.value}` })
+                    this.$router.replace({ path: `/suggestionv/${this.value}` })
                     return true
                 } else {
                     this.$router.push({ path: `/suggestionh` })
@@ -112,13 +112,13 @@ define([
                 <ul>
                      <li @click="sendSearch(sug)" ref="sugItems" v-for="sug in sugs" class="s-title">{{sug}}</li>
                 </ul>
-                <p @click="refresh" class="s-refresh"><img src="imgs/aui-icon-refresh.png" width="14px" height="14px" alt="">换一批</p>
+                <p  class="s-refresh"><span @click="refresh"><img src="imgs/aui-icon-refresh.png" width="14px" height="14px" alt="">换一批</span></p>
             </div>
             <div v-if="historyShow"  class="search-history">
                 <ul>
                     <li @click="sendSearch(history)" v-for="history in historys" class="s-title"><img src="imgs/history.png" width="12px" height="12px" alt="">{{history}}</li>
                 </ul>
-                <p @click="clear" class="s-delete"><img src="imgs/clear.png" width="14px" height="14px" alt="">清空搜索历史</p>
+                <p  class="s-delete"><span @click="clear"><img src="imgs/clear.png" width="14px" height="14px" alt="">清空搜索历史</span></p>
             </div>
             </div>
             `,
