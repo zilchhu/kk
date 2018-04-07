@@ -2,7 +2,7 @@ define([
     'vue', 'axios', 'util'
 ], function (Vue, axios, Util) {
     var bus = new Vue()
-    const _SearchForm = {
+    const _Form = {
         template: `
             <div class="search-form">
                 <form class="s-form">
@@ -20,10 +20,10 @@ define([
         computed: {
             deleteShow: function () {
                 if (this.value != '') {
-                    this.$router.replace({ path: `/suggestionv/${this.value}` })
+                    this.$router.replace({ path: `/search/suggestion/${this.value}` })
                     return true
                 } else {
-                    this.$router.push({ path: `/suggestionh` })
+                    this.$router.replace({ path: `/search/suggestionh` })
                     return false
                 }
             }
@@ -35,15 +35,17 @@ define([
             },
             sendSearch: function (value) {
                 //bus.$emit('search-words', value)
-                localStorage.setItem(value, value)
-                this.$router.push({ path: `/detail/${value}` })
+                if (value != '') {
+                    localStorage.setItem(value, value)
+                    this.$router.replace({ path: `/search/detail/${value}` })
+                }
             }
         },
         mounted: function () {
             this.$refs.in.focus()
         }
     }
-    const _SearchSuggestion = {
+    const _Suggestion = {
         props: {
             words: {
                 type: String
@@ -86,11 +88,11 @@ define([
             sendSearch: function (value) {
                 // bus.$emit('search-words', value)
                 localStorage.setItem(value, value)
-                this.$router.push({ path: `/detail/${value}` })
+                this.$router.replace({ path: `/search/detail/${value}` })
             },
             getSearch: function (val) {
                 console.log(val, 'new')
-                axios.get(this.forward_url+this.base_url+val)
+                axios.get(this.forward_url + this.base_url + val)
                     .then(response => {
                         this.parse(response)
                     })
@@ -100,7 +102,7 @@ define([
             }
         }
     }
-    const _SearchSuggestionH = {
+    const _SuggestionH = {
         props: {
             words: {
                 type: String
@@ -145,7 +147,7 @@ define([
             sendSearch: function (value) {
                 //bus.$emit('search-words', value)
                 localStorage.setItem(value, value)
-                this.$router.push({ path: `/detail/${value}` })
+                this.$router.replace({ path: `/search/detail/${value}` })
             },
             clear: function () {
                 this.historys.clear()
@@ -174,8 +176,7 @@ define([
             // })
         }
     }
-
-    const _SearchDetail = {
+    const _Detail = {
         props: {
             words: {
                 type: String
@@ -218,10 +219,25 @@ define([
         }
 
     }
+    const _Main = {
+        template: `
+            <div>
+                <common-header :title="title"></common-header>
+                <search-form></search-form>
+                <router-view></router-view>
+            </div>
+            `,
+        data:function(){
+            return {
+                title: '搜索'
+            }
+        }
+    }
     return {
-        SearchForm: _SearchForm,
-        SearchSuggestion: _SearchSuggestion,
-        SearchSuggestionH: _SearchSuggestionH,
-        SearchDetail: _SearchDetail
+        Form: _Form,
+        Suggestion: _Suggestion,
+        SuggestionH: _SuggestionH,
+        Detail: _Detail,
+        Main: _Main
     }
 });

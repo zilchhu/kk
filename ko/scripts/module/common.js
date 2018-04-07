@@ -12,9 +12,14 @@ define([
         template: `
             <header class="header">
                 <p class="h-title">{{title}}</p>
-                <span class="h-back">back</span>
+                <span @click="back" class="h-back"><img src="imgs/back.png" width="14px" height="14px" alt="">返回</span>
             </header>
-         `
+         `,
+        methods: {
+            back: function () {
+                window.history.back()
+            }
+        }
     }
 
     return {

@@ -12,6 +12,7 @@ li {
   right: 0;
   bottom: 0 ;
   background: #f1f1f1;
+  font-family: "微软雅黑";
 }
 .header {
   display: block;
@@ -31,7 +32,27 @@ li {
   left: 20px;
   transform: translateY(-50%);
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 400;
+}
+.header .h-back img {
+  vertical-align: middle;
+}
+.index-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  background: white;
+}
+.index-header ul .to {
+  float: left;
+  padding: 0 4px;
+}
+.index-header > img {
+  border-radius: 50%;
+}
+.to-active {
+  color: coral;
 }
 .search-form {
   padding: 20px;
@@ -78,6 +99,7 @@ li {
 }
 .search-suggestion-h ul {
   display: block;
+  position: relative;
   padding: 8px;
   height: 100px;
   overflow: hidden;
