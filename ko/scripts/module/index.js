@@ -2,7 +2,7 @@ define([
     'vue',
 ], function (Vue) {
 
-    const _Header = {
+    const _Tab = {
         template: `
             <header class="index-header">
                 <router-link to="/person" tag="img" class="avator" src="imgs/avator.png" width="18px" height="18px"></router-link>
@@ -30,14 +30,14 @@ define([
     const _Main = {
         template: `
             <div>
-                <index-header></index-header>
+                <index-tab></index-tab>
                 <router-view></router-view>
             </div>
             `
     }
 
     return {
-        Header: _Header,
+        Tab: _Tab,
         Main: _Main
     }
 

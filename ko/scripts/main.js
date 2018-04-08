@@ -10,17 +10,22 @@ requirejs.config({
         test: '..test/test',
         common: '../module/common',
         index: '../module/index',
+        book_shelf: '../module/book_shelf',
         search: '../module/search'
     }
 })
 
-requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'index', 'search'], function ($, Util, Vue, VueRouter, axios, Common, Index, Search) {
+requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'index', 'book_shelf', 'search'], function ($, Util, Vue, VueRouter, axios, Common, Index, BookShelf, Search) {
     Vue.use(VueRouter)
 
     Vue.component('common-header', Common.Header)
 
-    Vue.component('index-header', Index.Header)
+    Vue.component('index-tab', Index.Tab)
     Vue.component('index', Index.Main)
+
+    Vue.component('book-shelf-recommendation', BookShelf.Recommendation)
+    Vue.component('book-shelf-books', BookShelf.Books)
+    Vue.component('book-shelf', BookShelf.Main)
 
     Vue.component('search-form', Search.Form)
     Vue.component('search-suggestion', Search.Suggestion)
@@ -42,8 +47,8 @@ requirejs(['jquery', 'util', 'vue', 'vue_router', 'axios', 'common', 'index', 's
         {
             path: '/index', component: Index.Main,
             children: [
-                { path: '/index/suggestionh', component: Search.SearchSuggestionH },
-                { path: '/index*', redirect: '/index/suggestionh' }
+                { path: '/index/shelf', component: BookShelf.Main },
+                { path: '/index*', redirect: '/index/shelf' }
             ]
         },
         {

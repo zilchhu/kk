@@ -12,7 +12,7 @@ define([
         template: `
             <header class="header">
                 <p class="h-title">{{title}}</p>
-                <span @click="back" class="h-back"><img src="imgs/back.png" width="14px" height="14px" alt="">返回</span>
+                <span @click="back" class="h-back"><img src="imgs/back.png" width="16px" height="16px" alt="">返回</span>
             </header>
          `,
         methods: {
